@@ -3,12 +3,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
-    const navigate = useNavigate(); // Gantikan useHistory dengan useNavigate
+    const navigate = useNavigate();
 
     const Logout = async () => {
         try {
             await axios.delete('http://localhost:5000/logout');
-            navigate("/"); // Gunakan navigate sebagai pengganti history.push
+            navigate("/");
         } catch (error) {
             console.log(error);
         }
