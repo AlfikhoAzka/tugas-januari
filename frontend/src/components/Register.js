@@ -19,7 +19,7 @@ const Register = () => {
                 password: password,
                 confPassword: confPassword
             });
-            navigate("/"); // Navigasi ke halaman lain
+            navigate("/");
         } catch (error) {
             if (error.response) {
                 setMsg(error.response.data.msg);
