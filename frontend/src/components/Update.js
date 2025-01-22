@@ -6,7 +6,6 @@ const Update = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confPassword, setConfPassword] = useState('');
     const [msg, setMsg] = useState('');
     const navigate = useNavigate();
     const { id } = useParams();
@@ -32,7 +31,7 @@ const Update = () => {
             await axios.put(`http://localhost:5000/users/${id}`, {
                 name: name,
                 email: email,
-                ...(password && { password, confPassword }),
+                ...(password && { password }),
             });
             navigate('/dashboard');
         } catch (error) {
@@ -86,19 +85,6 @@ const Update = () => {
                                             placeholder="New Password (optional)"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="field mt-5">
-                                    <label className="label">Confirm Password</label>
-                                    <div className="controls">
-                                        <input
-                                            type="password"
-                                            className="input"
-                                            placeholder="Confirm New Password (optional)"
-                                            value={confPassword}
-                                            onChange={(e) => setConfPassword(e.target.value)}
                                         />
                                     </div>
                                 </div>
