@@ -65,14 +65,12 @@ const Dashboard = () => {
         e.preventDefault();
         try {
             if (formData.id) {
-                // Update existing user
                 await axiosJWT.put(`http://localhost:5000/users/${formData.id}`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
             } else {
-                // Create new user
                 await axiosJWT.post('http://localhost:5000/users', formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
