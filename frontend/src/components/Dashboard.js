@@ -8,7 +8,6 @@ const Dashboard = () => {
     const [token, setToken] = useState('');
     const [expire, setExpire] = useState('');
     const [users, setUsers] = useState([]);
-    const [formData, setFormData] = useState({ id: '', name: '', email: '' });
     const navigate = useNavigate();
 
     const refreshToken = useCallback(async () => {
@@ -56,38 +55,6 @@ const Dashboard = () => {
         }
     }, [axiosJWT, token]);
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            if (formData.id) {
-                await axiosJWT.put(`http://localhost:5000/users/${formData.id}`, formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            } else {
-                await axiosJWT.post('http://localhost:5000/users', formData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-            }
-            setFormData({ id: '', name: '', email: '' });
-            getUsers();
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const handleEdit = (user) => {
-        setFormData(user);
-    };
-
     const handleDelete = async (id) => {
         try {
             await axiosJWT.delete(`http://localhost:5000/users/${id}`, {
@@ -101,6 +68,10 @@ const Dashboard = () => {
         }
     };
 
+    const handleEdit = (id) => {
+        navigate(`/edit-user/${id}`);
+    };
+
     useEffect(() => {
         refreshToken();
         getUsers();
@@ -110,41 +81,9 @@ const Dashboard = () => {
         <div className="container mt-5">
             <h1>Welcome Back: {name}</h1>
 
-            <form onSubmit={handleSubmit} className="mb-4">
-                <div className="field">
-                    <label className="label">Name</label>
-                    <div className="control">
-                        <input
-                            className="input"
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="field">
-                    <label className="label">Email</label>
-                    <div className="control">
-                        <input
-                            className="input"
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="control">
-                    <button className="button is-primary" type="submit">
-                        {formData.id ? 'Update User' : 'Add User'}
-                    </button>
-                </div>
-            </form>
+            <button className="button is-primary" onClick={() => navigate('/dashboard/register')}>
+                Add User
+            </button>
 
             <table className="table is-striped is-fullwidth">
                 <thead>
@@ -164,7 +103,7 @@ const Dashboard = () => {
                             <td>
                                 <button
                                     className="button is-info mr-2"
-                                    onClick={() => handleEdit(user)}
+                                    onClick={() => handleEdit(user.id)}
                                 >
                                     Edit
                                 </button>

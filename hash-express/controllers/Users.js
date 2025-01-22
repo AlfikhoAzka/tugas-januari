@@ -16,16 +16,20 @@ export const getUsers = async (req, res) => {
 
 export const Register = async (req, res) => {
     const { name, email, password, confPassword } = req.body;
+
     if (password !== confPassword) return res.status(400).json({ msg: "Password and Confirm Password do not match" });
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
+
     try {
-        await Users.create({
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await Users.create({
             name,
             email,
             password: hashPassword
         });
-        res.json({ msg: "Registration Successful" });
+
+        res.status(201).json({ msg: "Registration Successful", user: newUser });
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: "Registration failed" });
@@ -109,5 +113,27 @@ export const deleteUser = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: "Failed to delete user" });
+    }
+};
+
+export const addUser = async (req, res) => {
+    const { name, email, password, confPassword } = req.body;
+
+    if (password !== confPassword) return res.status(400).json({ msg: "Password and Confirm Password do not match" });
+
+    try {
+        const salt = await bcrypt.genSalt();
+        const hashPassword = await bcrypt.hash(password, salt);
+
+        const newUser = await Users.create({
+            name,
+            email,
+            password: hashPassword
+        });
+
+        res.status(201).json({ msg: "User added successfully", user: newUser });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: "Failed to add user" });
     }
 };
